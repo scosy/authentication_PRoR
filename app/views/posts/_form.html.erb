@@ -1,0 +1,11 @@
+<%= form_for @post do |f| %>
+  <div><%= f.label :title %></div>
+  <div><%= f.text_field :title %></div>
+
+  <div><%= f.label :body %></div>
+  <div><%= f.text_area :body %></div>
+
+  <div><%= f.hidden_field :user_id, value: session[:user_id] %></div>
+
+  <%= f.submit %>
+<% end %>

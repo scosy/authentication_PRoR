@@ -1,0 +1,5 @@
+<div><%= link_to  "New Post", new_post_path %></div>
+<% @posts.each do |post| %>
+  <div><%= post.title %> by <%= post.user.email %></div>
+  <%= link_to  "Show this post", post_path(post.id) %>
+<% end %>
