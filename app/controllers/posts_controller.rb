@@ -9,6 +9,11 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
+
+    return if session[:user_id]
+
+    redirect_to posts_path
+    flash[:alert] = 'You need to login to create a post'
   end
 
   def create
@@ -17,18 +22,23 @@ class PostsController < ApplicationController
     if @post.save
       redirect_to post_path(@post.id)
     else
-      puts "------- #{@post.errors.full_messages}"
-      puts "------- #{params}"
+      flash.now[:alert] = @post.errors.full_messages.join(', ')
       render :new, status: :unprocessable_entity
     end
   end
 
-  def edit; end
+  def edit
+    return if @post.user.id == session[:user_id]
+
+    redirect_to post_path(@post.id)
+    flash[:alert] = "You're not the author of this post"
+  end
 
   def update
     if @post.update(post_params)
       redirect_to post_path(@post.id)
     else
+      flash.now[:notice] = @post.errors.full_messages
       render :edit, status: :unprocessable_entity
     end
   end
